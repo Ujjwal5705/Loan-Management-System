@@ -9,14 +9,14 @@ export const runBRE = (
   if (age < 23 || age > 50) {
     return {
       passed: false,
-      message: "Age must be between 23 and 50[cite: 1]",
+      message: "Age must be between 23 and 50",
     };
   }
 
   if (salary < 25000) {
     return {
       passed: false,
-      message: "Salary must be at least ₹25000[cite: 1]",
+      message: "Salary must be at least ₹25000",
     };
   }
 
@@ -25,14 +25,14 @@ export const runBRE = (
   if (!panRegex.test(pan)) {
     return {
       passed: false,
-      message: "Invalid PAN format[cite: 1]",
+      message: "Invalid PAN format",
     };
   }
 
   if (!employmentMode || employmentMode.toUpperCase() === "UNEMPLOYED") {
     return {
       passed: false,
-      message: "Employment status is not eligible for a loan[cite: 1]",
+      message: "Employment status is not eligible for a loan",
     };
   }
 
