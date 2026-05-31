@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import api from "@/lib/axios";
@@ -12,7 +12,6 @@ import {
   Upload,
   FileText,
   DollarSign,
-  Calendar,
   Percent,
   LogOut,
   User,
@@ -27,6 +26,7 @@ import {
 export default function ApplyPage() {
   const router = useRouter();
   const [step, setStep] = useState(1);
+  const [pageLoading, setPageLoading] = useState(true);
   const [profileCreated, setProfileCreated] = useState(false);
   const [fileUploaded, setFileUploaded] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -52,27 +52,67 @@ export default function ApplyPage() {
   );
   const totalRepayment = amount + interestAmount;
 
+  // Sync state on load/refresh to provide multi-step persistence
+  useEffect(() => {
+    api
+      .get("/borrower/profile")
+      .then((res) => {
+        if (res.data && res.data.profile) {
+          const profile = res.data.profile;
+
+          setPersonalDetails({
+            fullName: profile.fullName || "",
+            pan: profile.pan || "",
+            dob: profile.dob ? profile.dob.split("T")[0] : "",
+            monthlySalary: profile.monthlySalary || "",
+            employmentMode: profile.employmentMode || "Salaried",
+          });
+
+          setProfileCreated(true);
+
+          // Route persistence depending on backend data presence
+          if (profile.loanApplied) {
+            if (profile.loanId) setLoanRefId(profile.loanId);
+            setStep(4);
+          } else if (profile.salarySlipUrl) {
+            setFileUploaded(true);
+            setStep(3);
+          } else {
+            setStep(2);
+          }
+        }
+        setPageLoading(false);
+      })
+      .catch(() => {
+        // Safe rejection means no application document is built yet
+        setPageLoading(false);
+      });
+  }, []);
+
   // Handle Step 1 Submit (BRE Verification)
-  const handleProfileSubmit = async (e: React.FormEvent) => {
+  const handleProfileSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const payload = {
-        ...personalDetails,
-        monthlySalary: Number(personalDetails.monthlySalary),
-      };
-      await api.post("/borrower/profile", payload);
-      toast.success("Profile eligible! BRE Validation Passed.");
-      setProfileCreated(true);
-      setStep(2);
-    } catch (err: any) {
-      const errorMsg =
-        err.response?.data?.message || "Eligibility Check Failed.";
-      toast.error(errorMsg, { duration: 5000 });
-    }
+    const payload = {
+      ...personalDetails,
+      monthlySalary: Number(personalDetails.monthlySalary),
+    };
+
+    api
+      .post("/borrower/profile", payload)
+      .then(() => {
+        toast.success("Profile eligible! BRE Validation Passed.");
+        setProfileCreated(true);
+        setStep(2);
+      })
+      .catch((err: any) => {
+        const errorMsg =
+          err.response?.data?.message || "Eligibility Check Failed.";
+        toast.error(errorMsg, { duration: 5000 });
+      });
   };
 
   // Handle Step 2 File Upload
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files || e.target.files.length === 0) return;
     const file = e.target.files[0];
 
@@ -85,32 +125,37 @@ export default function ApplyPage() {
     formData.append("salarySlip", file);
 
     setUploading(true);
-    try {
-      await api.post("/borrower/upload-slip", formData, {
+    api
+      .post("/borrower/upload-slip", formData, {
         headers: { "Content-Type": "multipart/form-data" },
+      })
+      .then(() => {
+        toast.success("Salary slip linked successfully!");
+        setFileUploaded(true);
+        setStep(3);
+      })
+      .catch(() => {
+        toast.error("File upload failed.");
+      })
+      .finally(() => {
+        setUploading(false);
       });
-      toast.success("Salary slip linked successfully!");
-      setFileUploaded(true);
-      setStep(3);
-    } catch (err) {
-      toast.error("File upload failed.");
-    } finally {
-      setUploading(false);
-    }
   };
 
   // Handle Step 3 Final Application Submission
-  const handleFinalApply = async () => {
-    try {
-      const { data } = await api.post("/loan/apply", { amount, tenureDays });
-      toast.success("Loan application successfully registered!");
-      if (data?.loan?._id || data?._id) {
-        setLoanRefId(data?.loan?._id || data?._id);
-      }
-      setStep(4);
-    } catch (err: any) {
-      toast.error(err.response?.data?.message || "Submission failed.");
-    }
+  const handleFinalApply = () => {
+    api
+      .post("/loan/apply", { amount, tenureDays })
+      .then(({ data }) => {
+        toast.success("Loan application successfully registered!");
+        if (data?.loan?._id || data?._id) {
+          setLoanRefId(data?.loan?._id || data?._id);
+        }
+        setStep(4);
+      })
+      .catch((err: any) => {
+        toast.error(err.response?.data?.message || "Submission failed.");
+      });
   };
 
   const handleLogout = () => {
@@ -124,6 +169,17 @@ export default function ApplyPage() {
     { number: 3, label: "Loan Configuration" },
     { number: 4, label: "Submission" },
   ];
+
+  if (pageLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 gap-3">
+        <Loader2 className="w-8 h-8 text-indigo-600 animate-spin" />
+        <p className="text-sm font-medium text-slate-500">
+          Synchronizing Application Pipeline State...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <ProtectedRoute>
