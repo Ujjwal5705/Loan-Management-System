@@ -60,11 +60,10 @@ export default function DashboardHub() {
                   className="p-5 border text-left rounded-xl bg-white hover:border-black hover:shadow-sm transition"
                 >
                   <h4 className="font-bold text-gray-900">
-                    Sales Pipeline [cite: 48, 56]
+                    Sales Pipeline
                   </h4>
                   <p className="text-xs text-gray-500 mt-1">
-                    Monitor cold registration leads and user pipelines[cite:
-                    57].
+                    Monitor cold registration leads and user pipelines.
                   </p>
                 </button>
                 <button
@@ -72,11 +71,10 @@ export default function DashboardHub() {
                   className="p-5 border text-left rounded-xl bg-white hover:border-black hover:shadow-sm transition"
                 >
                   <h4 className="font-bold text-gray-900">
-                    Credit Risk & Sanctions [cite: 50, 58]
+                    Credit Risk & Sanctions
                   </h4>
                   <p className="text-xs text-gray-500 mt-1">
-                    Review active applications and issue loan decisions[cite:
-                    59].
+                    Review active applications and issue loan decisions.
                   </p>
                 </button>
                 <button
@@ -84,11 +82,10 @@ export default function DashboardHub() {
                   className="p-5 border text-left rounded-xl bg-white hover:border-black hover:shadow-sm transition"
                 >
                   <h4 className="font-bold text-gray-900">
-                    Capital Deployment Desk [cite: 51, 61]
+                    Capital Deployment Desk
                   </h4>
                   <p className="text-xs text-gray-500 mt-1">
-                    Authorize funding instructions and verify loan states[cite:
-                    62].
+                    Authorize funding instructions and verify loan states.
                   </p>
                 </button>
                 <button
@@ -96,11 +93,10 @@ export default function DashboardHub() {
                   className="p-5 border text-left rounded-xl bg-white hover:border-black hover:shadow-sm transition"
                 >
                   <h4 className="font-bold text-gray-900">
-                    Clearing & Collections Portal [cite: 53, 65]
+                    Clearing & Collections Portal
                   </h4>
                   <p className="text-xs text-gray-500 mt-1">
-                    Record repayment UTR sequences and adjust accounts[cite: 66,
-                    67].
+                    Record repayment UTR sequences and adjust accounts.
                   </p>
                 </button>
               </div>
