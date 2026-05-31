@@ -17,7 +17,16 @@ export const createProfile = async (req: AuthRequest, res: Response) => {
 
     const { fullName, pan, dob, monthlySalary, employmentMode } = req.body;
 
-    const breResult = runBRE(dob, monthlySalary, pan, employmentMode);
+    const upperCasedEmployment = employmentMode
+      ? employmentMode.trim().toUpperCase()
+      : "";
+
+    const breResult = runBRE(
+      dob,
+      Number(monthlySalary),
+      pan,
+      upperCasedEmployment,
+    );
 
     if (!breResult.passed) {
       return res.status(400).json({
@@ -32,7 +41,7 @@ export const createProfile = async (req: AuthRequest, res: Response) => {
       pan,
       dob,
       monthlySalary,
-      employmentMode,
+      employmentMode: upperCasedEmployment,
       brePassed: true,
     });
 
@@ -53,18 +62,17 @@ export const uploadSalarySlip = async (req: AuthRequest, res: Response) => {
 
     if (!profile) {
       return res.status(404).json({
-        message: "Profile not found",
+        message: "Profile not found. Please create a profile first.",
       });
     }
 
     if (!req.file) {
       return res.status(400).json({
-        message: "File required",
+        message: "File required. Please attach a valid document.",
       });
     }
 
     profile.salarySlip = req.file.filename;
-
     await profile.save();
 
     return res.json({

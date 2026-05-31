@@ -17,7 +17,7 @@ import {
 const router = Router();
 
 router.get(
-  "/loans",
+  "/pending",
   authenticate,
   authorize([
     "SANCTION",

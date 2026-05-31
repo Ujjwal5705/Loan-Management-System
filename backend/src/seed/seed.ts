@@ -15,11 +15,7 @@ const seed = async () => {
     },
   });
 
-  const password =
-    await bcrypt.hash(
-      "Password@123",
-      10
-    );
+  const password = await bcrypt.hash("Password@123", 10);
 
   const users = [
     {
@@ -39,14 +35,12 @@ const seed = async () => {
     },
     {
       fullName: "Disbursement",
-      email:
-        "disbursement@lms.com",
+      email: "disbursement@lms.com",
       role: "DISBURSEMENT",
     },
     {
       fullName: "Collection",
-      email:
-        "collection@lms.com",
+      email: "collection@lms.com",
       role: "COLLECTION",
     },
   ];
@@ -58,9 +52,7 @@ const seed = async () => {
     });
   }
 
-  console.log(
-    "Seed completed"
-  );
+  console.log("Seed completed");
 
   process.exit();
 };
