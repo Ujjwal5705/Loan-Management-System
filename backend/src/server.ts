@@ -20,15 +20,26 @@ const app = express();
 
 connectDB();
 
+// Keep your explicit base URLs here (removed the trailing slash from the Vercel link for exact matching)
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://loan-management-system-gce3jeik2.vercel.app"
+  "https://loan-management-system-gce3jeik2.vercel.app",
+  "https://loan-management-system-l81a2tard.vercel.app",
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      // 1. Allow requests with no origin (like mobile apps, Postman, or curl)
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      // 2. Check if the origin matches our base list or ends with '.vercel.app'
+      const isAllowedBase = allowedOrigins.includes(origin);
+      const isVercelDeployment = origin.endsWith(".vercel.app");
+
+      if (isAllowedBase || isVercelDeployment) {
         callback(null, true);
       } else {
         callback(new Error("Blocked by server production CORS security layer"));
@@ -36,16 +47,13 @@ app.use(
     },
     credentials: true,
     methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-  })
+    allowedHeaders: ["Content-Type", "Authorization"],
+  }),
 );
 
 app.use(express.json());
 
-app.use(
-  "/uploads",
-  express.static(path.join(__dirname, "../uploads"))
-);
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 app.use("/api/auth", authRoutes);
 app.use("/api/borrower", borrowerRoutes);
