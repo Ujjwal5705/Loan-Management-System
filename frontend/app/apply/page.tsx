@@ -127,7 +127,7 @@ export default function ApplyPage() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50/30 py-8 px-4">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 to-indigo-50/30 py-8 px-4">
         <div className="max-w-3xl mx-auto">
           {/* Header */}
           <div className="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden mb-6">
@@ -297,7 +297,7 @@ export default function ApplyPage() {
                     <div className="relative">
                       <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
                       <select
-                        className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22/%3E%3C/svg%3E')] bg-no-repeat bg-[right_0.75rem_center] bg-[length:16px]"
+                        className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22/%3E%3C/svg%3E')] bg-no-repeat bg-position-[right_0.75rem_center] bg-size-[16px]"
                         value={personalDetails.employmentMode}
                         onChange={(e) =>
                           setPersonalDetails({
@@ -431,7 +431,7 @@ export default function ApplyPage() {
                   </div>
 
                   {/* Breakdown Card */}
-                  <div className="bg-gradient-to-br from-slate-50 to-indigo-50 rounded-xl p-5 border border-slate-200 shadow-inner space-y-3">
+                  <div className="bg-linear-to-br from-slate-50 to-indigo-50 rounded-xl p-5 border border-slate-200 shadow-inner space-y-3">
                     <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-400">
                       <Percent className="w-3.5 h-3.5" />
                       Live Breakdown

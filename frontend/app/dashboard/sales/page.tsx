@@ -34,7 +34,7 @@ export default function SalesDashboard() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50/30 p-6 md:p-8">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 to-indigo-50/30 p-6 md:p-8">
         <div className="max-w-6xl mx-auto">
           {/* Page Header */}
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between border-b border-slate-200 pb-6 mb-8">

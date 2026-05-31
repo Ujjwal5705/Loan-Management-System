@@ -114,7 +114,7 @@ export default function SanctionDashboard() {
 
   return (
     <ProtectedRoute>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-50/30 p-6 md:p-8">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 to-indigo-50/30 p-6 md:p-8">
         <div className="max-w-7xl mx-auto">
           {/* Page Header */}
           <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between border-b border-slate-200 pb-6 mb-8">
@@ -199,7 +199,7 @@ export default function SanctionDashboard() {
                       <p className="text-xs font-medium text-slate-400 uppercase tracking-wider">
                         Application Ref
                       </p>
-                      <p className="text-sm font-mono font-semibold text-slate-700 truncate max-w-[200px]">
+                      <p className="text-sm font-mono font-semibold text-slate-700 truncate max-w-50">
                         {loan._id}
                       </p>
                     </div>
