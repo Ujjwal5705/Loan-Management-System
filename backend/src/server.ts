@@ -4,10 +4,7 @@ import cors from "cors";
 import path from "path";
 
 import { connectDB } from "./config/db";
-
-import {
-  authenticate
-} from "./middleware/auth.middleware";
+import { authenticate } from "./middleware/auth.middleware";
 
 import authRoutes from "./routes/auth.routes";
 import borrowerRoutes from "./routes/borrower.routes";
@@ -21,11 +18,34 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+connectDB();
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://loan-management-system-gce3jeik2.vercel.app"
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Blocked by server production CORS security layer"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"]
+  })
+);
 
 app.use(express.json());
 
-connectDB();
+app.use(
+  "/uploads",
+  express.static(path.join(__dirname, "../uploads"))
+);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/borrower", borrowerRoutes);
@@ -36,31 +56,16 @@ app.use("/api/disbursement", disbursementRoutes);
 app.use("/api/collection", collectionRoutes);
 
 app.get("/", (_, res) => {
-  res.send("LMS Backend Running");
+  res.send("LMS Backend Running Successfully");
 });
-
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-  })
-);
-
-app.use(
-  "/uploads",
-  express.static(
-    path.join(__dirname, "../uploads")
-  )
-); 
 
 app.get("/protected", authenticate, (req, res) => {
-    res.json({
-      message: "Authorized",
-    });
+  res.json({
+    message: "Authorized",
+  });
 });
 
-app.listen(process.env.PORT, () => {
-  console.log(
-    `Server running on ${process.env.PORT}`
-  );
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => {
+  console.log(`Server running safely on port ${PORT}`);
 });
